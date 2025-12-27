@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: chat-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      name: backend-pod
+      namespace: chat-app
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: chat-app-backend
+          image: sanvith/chatapp-backend:v7
+
+          ports:
+            - containerPort: 5001
+
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "5001"
+            - name: MONGODB_URI
+              # Assuming 'mongodb-service' is the name of the service for MongoDB.
+              # Update this if your service name is different.
+              value: "mongodb://mongoadmin:secret@mongodb-service:27017/chat-app?authSource=admin"
+            - name: JWT_SECRET
+              value: "development_secret_key_change_in_production"
+            - name: CLIENT_URL
+              value: "http://localhost:5173" # Or the frontend service URL if standard
+

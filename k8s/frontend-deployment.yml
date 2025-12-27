@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: chat-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      name: mongodb-pod
+      namespace: chat-app
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: chat-app-frontend
+          image: sanvith/chat-app-frontend:v12
+
+          ports:
+            - containerPort: 80
+
+          env:
+            - name: NODE_ENV
+              value: production
